@@ -1,0 +1,16 @@
+  	-l      (The lowercase letter “ell”.) List files in the long format, as described in the The Long Format subsection below.
+
+  	-t      Sort by descending time modified (most recently modified first).  If two files have the same modification timestamp, sort their names in ascending lexicographical
+             order.  The -r option reverses both of these sort orders.
+
+             Note that these sort orders are contradictory: the time sequence is in descending order, the lexicographical sort is in ascending order.  This behavior is mandated by
+             IEEE Std 1003.2 (“POSIX.2”).  This feature can cause problems listing files stored with sequential names on FAT file systems, such as from digital cameras, where it
+             is possible to have more than one image with the same timestamp.  In such a case, the photos cannot be listed in the sequence in which they were taken.  To ensure the
+             same sort order for time and for lexicographical sorting, set the environment variable LS_SAMESORT or use the -y option.  This causes ls to reverse the
+             lexicographical sort order when sorting files with the same modification timestamp.
+
+	-R      Recursively list subdirectories encountered.
+
+	-r      Reverse the order of the sort.
+
+	-a      Include directory entries whose names begin with a dot (‘.’).
