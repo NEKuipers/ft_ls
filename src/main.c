@@ -23,44 +23,55 @@ void	error_and_exit(char *reason, char *flags)
 	exit(1);
 }
 
-int count_total_targets(t_ls_data ls_data)
+void	free_ls_data(t_ls_data *ls_data)
 {
-	int count;
-	
-	count = 0;
-	if (ls_data.targetdirs != 0)
-		count = sizeof(ls_data.targetdirs) / 8;
-	if (ls_data.targetfiles != 0)
-		count += sizeof(ls_data.targetfiles) / 8;
-	return count;
+	int i = 0;
+
+	if (ls_data->flags)
+		free(ls_data->flags);
+
+	if (ls_data->targetdirs) {
+		while (ls_data->targetdirs[i] != NULL) 
+			free(ls_data->targetdirs[i++]);
+		free(ls_data->targetdirs);
+	}
+
+	i = 0;
+	if (ls_data->targetfiles) {
+		while (ls_data->targetfiles[i] != NULL) 
+			free(ls_data->targetfiles[i++]);
+		free(ls_data->targetfiles);
+	}
 }
+
 
 int	main(int argc, char **argv)
 {
-	char		*flags;
 	t_ls_data	ls_data;
 
+	ls_data.flags = parse_ls_flags(argv);
 	ls_data.targetdirs = find_targets(argc, argv, 'd');
 	ls_data.targetfiles = find_targets(argc, argv, 'f');
 	
-	flags = parse_ls_flags(argv, argc - count_total_targets(ls_data) - 1);
-	if (flags[0] == 'E')
-		error_and_exit("invalid flag\n", flags);
+	if (ls_data.flags[0] == 'E')
+		error_and_exit("invalid flag\n", ls_data.flags);
+
+	//Debugging block 
+	ft_printf("flags: %s\n", ls_data.flags);
 	if (ls_data.targetdirs != NULL) {
 		for (int x = 0; ls_data.targetdirs[x]; x++) {
 			ft_printf("target dir: %s\n", ls_data.targetdirs[x]);
 		}
 	}
 	if (ls_data.targetfiles != NULL) {
-		for (int x = 0; ls_data.targetdirs[x]; x++) {
+		for (int x = 0; ls_data.targetfiles[x]; x++) {
 			ft_printf("target file: %s\n",ls_data.targetfiles[x]);
 		}
 	}
-	ft_printf("flags: %s\n", flags);
+
 	// get_file_information(flags, &ls_data);
 	// sort_data(flags, &ls_data);
 	// print_data(flags, &ls_data);
-	if (flags)
-		free(flags);
+	free_ls_data(&ls_data);
 	return (0);
 }

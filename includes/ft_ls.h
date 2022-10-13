@@ -42,13 +42,14 @@ typedef struct s_directory
 
 typedef struct s_ls_data
 {
+	char		*flags;
 	char		**targetdirs;
 	char		**targetfiles;
 	t_directory	*founddirectories;
 	t_file		*foundfiles;
 }				t_ls_data;
 
-char			**find_targets(int argc, char **argv, char flag);
-char			*parse_ls_flags(char **argv, int lastflag);
+char			**find_targets(int argc, char **argv, char type);
+char			*parse_ls_flags(char **argv);
 
 #endif

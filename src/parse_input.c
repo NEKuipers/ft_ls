@@ -24,16 +24,16 @@ int	flag_is_duplicate(char *flags, char f)
 	int	i;
 
 	i = 0;
-	while (flags[i])
+	while (flags[i] != '\0')
 	{
 		if (flags[i] == f)
-			return (0);
+			return (1);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
-char	*parse_ls_flags(char **argv, int lastflag)
+char	*parse_ls_flags(char **argv)
 {
 	int		i;
 	int		j;
@@ -43,26 +43,27 @@ char	*parse_ls_flags(char **argv, int lastflag)
 	flagcounter = 0;
 	i = 1;
 	flags = ft_strdup("XXXXX");
-	while (argv[i] && i < lastflag)
+	while (argv[i])
 	{
 		j = 0;
 		while (argv[i][j])
 		{
-			if (argv[i][0] != '-' || (j > 0 && !ft_strchr("Ralrt", (argv[i][j]))))
+			if (argv[i][0] == '-' && (j > 0 && !ft_strchr("Ralrt", (argv[i][j]))))
 			{
 				flags[0] = 'E';
 				return (flags);
 			}
-			if (j > 0 && !flag_is_duplicate(flags, argv[i][j]))
+			if (argv[i][0] == '-' &&  j > 0 && !flag_is_duplicate(flags, argv[i][j])) {
 				flags[flagcounter++] = argv[i][j];
-				j++;
+			}
+			j++;
 		}
 		i++;
 	}
 	return (flags);
 }
 
-int	count_target_amount(int argc, char **argv, char flag)
+int	count_target_amount(int argc, char **argv, char type)
 {
 	struct	stat path_stat;
 	int	amount;
@@ -71,23 +72,24 @@ int	count_target_amount(int argc, char **argv, char flag)
 	while (argc > 1) {
 		argc--;
    		stat(argv[argc], &path_stat);
-		if (flag == 'd' && S_ISDIR(path_stat.st_mode)) {
+		if (type == 'd' && S_ISDIR(path_stat.st_mode)) {
 			amount++;
-		} else if (flag == 'f' && S_ISREG(path_stat.st_mode)) {
+		} else if (type == 'f' && S_ISREG(path_stat.st_mode)) {
 			amount++;
 		}
 	}
 	return amount;
 }
 
-char	**find_targets(int argc, char **argv, char flag)
+//TODO fix Weird bug when ./ft_ls [folder] [flag] [file] -> flag is considered file
+char	**find_targets(int argc, char **argv, char type)
 {
 	struct	stat path_stat;
 	char	**targets;
 	int		amount;
 	int		i;
 
-	amount = count_target_amount(argc, argv, flag);
+	amount = count_target_amount(argc, argv, type);
 	if (amount == 0)
 		return NULL;
 	targets = (char **)malloc(amount * sizeof(char *));
@@ -95,10 +97,10 @@ char	**find_targets(int argc, char **argv, char flag)
 	while (argc > 1) {
 		argc--;
    		stat(argv[argc], &path_stat);
-		if (flag == 'd' && S_ISREG(path_stat.st_mode)) {
+		if (type == 'f' && S_ISREG(path_stat.st_mode)) {
 			targets[i] = ft_strdup(argv[argc]);
 			i++;
-		} else if (S_ISDIR(path_stat.st_mode)) {
+		} else if (type == 'd' && S_ISDIR(path_stat.st_mode)) {
 			targets[i] = ft_strdup(argv[argc]);
 			i++;
 		}
