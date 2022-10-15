@@ -6,11 +6,11 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/29 21:47:11 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/15 23:49:21 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/16 00:37:03 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ft_ls.h"
+#include "../../includes/ft_ls.h"
 
 /*
 * Flags XXXXX : R a l r t
@@ -60,7 +60,7 @@ char	*parse_ls_flags(char **av, int amount)
 	return (flags);
 }
 
-static int	count_target_amount(char **av, int flag_args, t_data *data, \
+static int	count_operand_amount(char **av, int flag_args, t_data *data, \
 		char type)
 {
 	struct stat	path_stat;
@@ -80,15 +80,15 @@ static int	count_target_amount(char **av, int flag_args, t_data *data, \
 		}
 		else
 		{
-			if (type == 'f' && !arg_in_dirtargets(av[flag_args + i], data))
-				print_no_such_file(av[flag_args + i]);
+			if (type == 'f' && !arg_in_dir_operands(av[flag_args + i], data))
+				print_file_not_found(av[flag_args + i]);
 		}
 	}
 	return (amount);
 }
 
-//Something in printf is fucked
-char	**find_targets(char **av, int flag_args, t_data *data, char type)
+//Something in printf is fucked when using multiple variables...
+char	**find_operands(char **av, int flag_args, t_data *data, char type)
 {
 	struct stat	path_stat;
 	char		**targets;
@@ -96,7 +96,7 @@ char	**find_targets(char **av, int flag_args, t_data *data, char type)
 	int			i;
 
 	amount = 0;
-	amount = count_target_amount(av, flag_args, data, type);
+	amount = count_operand_amount(av, flag_args, data, type);
 	if (amount == 0)
 		return (NULL);
 	targets = (char **)malloc((amount + 1) * sizeof(char *));
@@ -124,8 +124,8 @@ t_data	*parse_input(int ac, char **av)
 	data->ac = ac;
 	number_of_flag_arguments = number_of_flags(ac, av);
 	data->flags = parse_ls_flags(av, number_of_flag_arguments);
-	data->targetdirs = find_targets(av, number_of_flag_arguments, data, 'd');
-	data->targetfiles = find_targets(av, number_of_flag_arguments, data, 'f');
+	data->dir_operands = find_operands(av, number_of_flag_arguments, data, 'd');
+	data->file_operands = find_operands(av, number_of_flag_arguments, data, 'f');
 	if (data->flags[0] == 'E')
 		error_and_exit("invalid flag\n", data->flags);
 	return (data);

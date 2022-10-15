@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/15 21:08:53 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/15 21:11:31 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/16 00:52:34 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	error_and_exit(char *reason, char *flags)
 	exit(1);
 }
 
+//TODO write funcions that free the directory and file objects
+
 void	free_data(t_data *data)
 {
 	int	i;
@@ -30,18 +32,18 @@ void	free_data(t_data *data)
 	i = 0;
 	if (data->flags)
 		free(data->flags);
-	if (data->targetdirs)
+	if (data->dir_operands)
 	{
-		while (data->targetdirs[i] != NULL)
-			free(data->targetdirs[i++]);
-		free(data->targetdirs);
+		while (data->dir_operands[i] != NULL)
+			free(data->dir_operands[i++]);
+		free(data->dir_operands);
 	}
 	i = 0;
-	if (data->targetfiles)
+	if (data->file_operands)
 	{
-		while (data->targetfiles[i] != NULL)
-			free(data->targetfiles[i++]);
-		free(data->targetfiles);
+		while (data->file_operands[i] != NULL)
+			free(data->file_operands[i++]);
+		free(data->file_operands);
 	}
 	free(data);
 }

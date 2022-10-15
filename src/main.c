@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/27 17:49:31 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/15 23:48:44 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/16 00:35:19 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,21 @@ int	main(int ac, char **av)
 
 	// //Debugging block 
 	// ft_printf("flags: %s\n", data->flags);
-	// if (data->targetdirs) {
-	// 	for (int x = 0; data->targetdirs[x]; x++) {
-	// 		ft_printf("target dir: %s\n", data->targetdirs[x]);
+	// if (data->dir_operands) {
+	// 	for (int x = 0; data->dir_operands[x]; x++) {
+	// 		ft_printf("target dir: %s\n", data->dir_operands[x]);
 	// 	}
 	// }
-	// if (data->targetfiles) {
-	// 	for (int x = 0; data->targetfiles[x]; x++) {
-	// 		ft_printf("target file: %s\n",data->targetfiles[x]);
+	// if (data->file_operands) {
+	// 	for (int x = 0; data->file_operands[x]; x++) {
+	// 		ft_printf("target file: %s\n",data->file_operands[x]);
 	// 	}
 	// }
 
 	
-	// get_file_information(flags, &data);
-	// sort_data(flags, &data);
-	// print_data(flags, &data);
+	get_filedata(data);
+	// sort_data(data);
+	// print_data(data);
 	free_data(data);
 	return (0);
 }

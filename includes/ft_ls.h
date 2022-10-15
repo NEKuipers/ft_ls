@@ -6,7 +6,7 @@
 /*   By: nkuipers <nkuipers@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/03/03 12:40:45 by nkuipers      #+#    #+#                 */
-/*   Updated: 2022/10/15 21:18:02 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/16 00:52:50 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ typedef struct s_directory
 typedef struct s_data
 {
 	char		*flags;
-	char		**targetdirs;
-	char		**targetfiles;
+	char		**dir_operands;
+	char		**file_operands;
 	t_directory	*founddirectories;
 	t_file		*foundfiles;
 	int			ac;
@@ -53,13 +53,19 @@ typedef struct s_data
 /*
  * Parsing
  */
-char			**find_targets(char **av, int flag_args, \
-					t_data *data, char type);
 t_data			*parse_input(int ac, char **av);
 char			*parse_ls_flags(char **av, int amount);
-int				arg_in_dirtargets(char *arg, t_data *data);
-void			print_no_such_file(char *target);
+char			**find_operands(char **av, int flag_args, \
+					t_data *data, char type);
+int				arg_in_dir_operands(char *arg, t_data *data);
+void			print_file_not_found(char *target);
 int				number_of_flags(int ac, char **av);
+
+/*
+ * File data
+ */
+void			get_filedata(t_data *data);
+
 
 /*
  * Utils
