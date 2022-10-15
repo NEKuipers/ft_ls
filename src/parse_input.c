@@ -6,13 +6,11 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/29 21:47:11 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/15 21:18:50 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/15 21:20:21 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
-#define FOUND_DIR S_ISDIR(path_stat.st_mode)
-#define FOUND_FILE S_ISREG(path_stat.st_mode)
 
 /*
 * Flags XXXXX : R a l r t
@@ -78,7 +76,8 @@ static int	count_target_amount(char **av, int flag_args, t_data *data, \
 		i++;
 		if (stat(av[flag_args + i], &path_stat) == 0)
 		{
-			if ((type == 'd' && FOUND_DIR) || (type == 'f' && FOUND_FILE))
+			if ((type == 'd' && S_ISDIR(path_stat.st_mode)) || \
+				(type == 'f' && S_ISREG(path_stat.st_mode)))
 				amount += 1;
 		}
 		else
@@ -108,7 +107,8 @@ char	**find_targets(char **av, int flag_args, t_data *data, char type)
 	{
 		if (stat(av[flag_args + 1], &path_stat) == 0)
 		{
-			if ((type == 'd' && FOUND_DIR) || (type == 'f' && FOUND_FILE))
+			if ((type == 'd' && S_ISDIR(path_stat.st_mode)) || \
+				(type == 'f' && S_ISREG(path_stat.st_mode)))
 				targets[i++] = ft_strdup(av[flag_args + 1]);
 		}
 		flag_args++;
