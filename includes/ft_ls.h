@@ -6,7 +6,7 @@
 /*   By: nkuipers <nkuipers@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/03/03 12:40:45 by nkuipers      #+#    #+#                 */
-/*   Updated: 2022/10/15 18:19:39 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/15 19:31:51 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ typedef struct s_ls_data
 }				t_ls_data;
 
 char			**find_targets(int argc, char **argv, int flag_args, char type);
+t_ls_data		*parse_input(int argc, char** argv);
 char			*parse_ls_flags(char **argv, int amount);
+
+void			print_no_such_file(char *target);
+int				number_of_flags(int argc, char **argv);
+void			error_and_exit(char *reason, char *flags);
 
 #endif

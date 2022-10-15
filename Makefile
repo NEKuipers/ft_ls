@@ -6,13 +6,14 @@
 #    By: nkuipers <nkuipers@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/03/03 12:40:13 by nkuipers      #+#    #+#                  #
-#    Updated: 2022/10/12 23:25:34 by nickkuipers   ########   odam.nl          #
+#    Updated: 2022/10/15 19:30:54 by nickkuipers   ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			=	ft_ls
 SRCS			=	main.c \
-					parse_input.c
+					parse_input.c \
+					parse_utils.c
 CFILES      	=   $(SRCS:%=src/%)
 OFILES      	=   $(CFILES:.c=.o)
 CFLAGS          =   -Wall -Wextra -Werror

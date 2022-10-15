@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/27 17:49:31 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/15 19:06:05 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/15 19:31:12 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,38 +44,6 @@ void	free_ls_data(t_ls_data *ls_data)
 		free(ls_data->targetfiles);
 	}
 	free(ls_data);
-}
-
-//if flags are specified after the target file/dir, print 'No such file or directory'.
-
-int number_of_flags(int argc, char **argv)
-{
-	int i;
-
-	i = 1;
-	while (argv[i] && i < argc)
-	{
-		if (argv[i][0] == '-')
-			i++;
-		else
-			break;
-	}
-	return (i - 1);
-}
-
-t_ls_data	*parse_input(int argc, char** argv)
-{
-	int	number_of_flag_arguments;
-	t_ls_data	*ls_data;
-	
-	ls_data = (t_ls_data *)malloc(sizeof(t_ls_data));
-	number_of_flag_arguments = number_of_flags(argc, argv);
-	ls_data->flags = parse_ls_flags(argv, number_of_flag_arguments);
-	ls_data->targetdirs = find_targets(argc, argv, number_of_flag_arguments, 'd');
-	ls_data->targetfiles = find_targets(argc, argv, number_of_flag_arguments, 'f');
-	if (ls_data->flags[0] == 'E')
-		error_and_exit("invalid flag\n", ls_data->flags);	
-	return (ls_data);
 }
 
 int	main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/29 21:47:11 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/15 19:07:27 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/15 19:40:07 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ int	count_target_amount(int argc, char **argv, int flag_args, char type)
    		stat(argv[flag_args + i], &path_stat);
 		if (FOUND_DIR || FOUND_FILE)
 			amount += 1;
+		if (type == 'd' && !S_ISDIR(path_stat.st_mode) && !S_ISREG(path_stat.st_mode))
+			print_no_such_file(argv[flag_args + 1]);
 	}
 
 	return (amount);
@@ -98,19 +100,30 @@ char	**find_targets(int argc, char **argv, int flag_args, char type)
 	if (amount == 0)
 		return (NULL);
 	targets = (char **)malloc((amount + 1) * sizeof(char *));
-	ft_printf("amount is %i\n", amount);
 	i = 0;
-	while ((flag_args + i + 1) < argc)
+	while ((flag_args + 1) < argc)
 	{
-		stat(argv[flag_args + i + 1], &path_stat);
-		if (FOUND_DIR || FOUND_FILE) {
-			targets[i] = ft_strdup(argv[flag_args + i + 1]);
-			if (type == 'f') {
-				ft_printf("%s\n", argv[i]);
-			}
-		}
-		i++;
+		//TODO for some reason it parses incorrect values if they follow a good one...
+		stat(argv[flag_args + 1], &path_stat);
+		if (FOUND_DIR || FOUND_FILE)
+			targets[i++] = ft_strdup(argv[flag_args + 1]);
+		flag_args++;
 	}
 	targets[i] = NULL;
 	return (targets);
+}
+
+t_ls_data	*parse_input(int argc, char** argv)
+{
+	int	number_of_flag_arguments;
+	t_ls_data	*ls_data;
+	
+	ls_data = (t_ls_data *)malloc(sizeof(t_ls_data));
+	number_of_flag_arguments = number_of_flags(argc, argv);
+	ls_data->flags = parse_ls_flags(argv, number_of_flag_arguments);
+	ls_data->targetdirs = find_targets(argc, argv, number_of_flag_arguments, 'd');
+	ls_data->targetfiles = find_targets(argc, argv, number_of_flag_arguments, 'f');
+	if (ls_data->flags[0] == 'E')
+		error_and_exit("invalid flag\n", ls_data->flags);	
+	return (ls_data);
 }
