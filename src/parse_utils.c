@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/15 19:29:22 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/15 19:36:15 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/15 20:57:45 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,20 @@ int number_of_flags(int argc, char **argv)
 			break;
 	}
 	return (i - 1);
+}
+
+int	arg_is_in_dir_targets(char *arg, t_data *data)
+{
+	int	i;
+
+	if (data->targetdirs == NULL)
+		return (0);
+	i = 0;
+	while (data->targetdirs[i])
+	{
+		if (ft_strcmp(arg, data->targetdirs[i]) == 0)
+			return (1);
+		i++;
+	}
+	return (0);
 }
