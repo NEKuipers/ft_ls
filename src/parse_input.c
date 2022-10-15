@@ -6,11 +6,13 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/29 21:47:11 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/13 00:13:55 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/15 19:07:27 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
+#define FOUND_DIR (type == 'd' && S_ISDIR(path_stat.st_mode))
+#define FOUND_FILE (type == 'f' && S_ISREG(path_stat.st_mode))
 
 /*
 * Flags XXXXX : R a l r t
@@ -33,7 +35,7 @@ int	flag_is_duplicate(char *flags, char f)
 	return (0);
 }
 
-char	*parse_ls_flags(char **argv)
+char	*parse_ls_flags(char **argv, int amount)
 {
 	int		i;
 	int		j;
@@ -43,7 +45,7 @@ char	*parse_ls_flags(char **argv)
 	flagcounter = 0;
 	i = 1;
 	flags = ft_strdup("XXXXX");
-	while (argv[i])
+	while (argv[i] && i < amount + 1)
 	{
 		j = 0;
 		while (argv[i][j])
@@ -63,47 +65,52 @@ char	*parse_ls_flags(char **argv)
 	return (flags);
 }
 
-int	count_target_amount(int argc, char **argv, char type)
+int	count_target_amount(int argc, char **argv, int flag_args, char type)
 {
 	struct	stat path_stat;
 	int	amount;
+	int	i;
 
 	amount = 0;
-	while (argc > 1) {
-		argc--;
-   		stat(argv[argc], &path_stat);
-		if (type == 'd' && S_ISDIR(path_stat.st_mode)) {
-			amount++;
-		} else if (type == 'f' && S_ISREG(path_stat.st_mode)) {
-			amount++;
-		}
+	i = 0;
+	while ((flag_args + i + 1) < argc)
+	{
+		i++;
+   		stat(argv[flag_args + i], &path_stat);
+		if (FOUND_DIR || FOUND_FILE)
+			amount += 1;
 	}
-	return amount;
+
+	return (amount);
 }
 
-//TODO fix Weird bug when ./ft_ls [folder] [flag] [file] -> flag is considered file
-char	**find_targets(int argc, char **argv, char type)
+//Something in printf is fucked
+char	**find_targets(int argc, char **argv, int flag_args, char type)
 {
-	struct	stat path_stat;
+	struct stat	path_stat;
 	char	**targets;
-	int		amount;
-	int		i;
+	int	amount;
+	int	i;
 
-	amount = count_target_amount(argc, argv, type);
+	amount = 0;
+	amount = count_target_amount(argc, argv, flag_args, type);
+
 	if (amount == 0)
-		return NULL;
-	targets = (char **)malloc(amount * sizeof(char *));
+		return (NULL);
+	targets = (char **)malloc((amount + 1) * sizeof(char *));
+	ft_printf("amount is %i\n", amount);
 	i = 0;
-	while (argc > 1) {
-		argc--;
-   		stat(argv[argc], &path_stat);
-		if (type == 'f' && S_ISREG(path_stat.st_mode)) {
-			targets[i] = ft_strdup(argv[argc]);
-			i++;
-		} else if (type == 'd' && S_ISDIR(path_stat.st_mode)) {
-			targets[i] = ft_strdup(argv[argc]);
-			i++;
+	while ((flag_args + i + 1) < argc)
+	{
+		stat(argv[flag_args + i + 1], &path_stat);
+		if (FOUND_DIR || FOUND_FILE) {
+			targets[i] = ft_strdup(argv[flag_args + i + 1]);
+			if (type == 'f') {
+				ft_printf("%s\n", argv[i]);
+			}
 		}
+		i++;
 	}
-	return targets;
+	targets[i] = NULL;
+	return (targets);
 }

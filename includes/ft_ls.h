@@ -6,7 +6,7 @@
 /*   By: nkuipers <nkuipers@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/03/03 12:40:45 by nkuipers      #+#    #+#                 */
-/*   Updated: 2022/10/13 00:14:28 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/15 18:19:39 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_ls_data
 	t_file		*foundfiles;
 }				t_ls_data;
 
-char			**find_targets(int argc, char **argv, char type);
-char			*parse_ls_flags(char **argv);
+char			**find_targets(int argc, char **argv, int flag_args, char type);
+char			*parse_ls_flags(char **argv, int amount);
 
 #endif
