@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/15 19:29:22 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/15 20:57:45 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/15 21:18:02 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,22 @@ void	print_no_such_file(char *target)
 	write(2, ": No such file or directory\n", 28);
 }
 
-int number_of_flags(int argc, char **argv)
+int	number_of_flags(int ac, char **av)
 {
-	int i;
+	int	i;
 
 	i = 1;
-	while (argv[i] && i < argc)
+	while (av[i] && i < ac)
 	{
-		if (argv[i][0] == '-')
+		if (av[i][0] == '-')
 			i++;
 		else
-			break;
+			break ;
 	}
 	return (i - 1);
 }
 
-int	arg_is_in_dir_targets(char *arg, t_data *data)
+int	arg_in_dirtargets(char *arg, t_data *data)
 {
 	int	i;
 

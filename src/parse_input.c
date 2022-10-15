@@ -6,17 +6,14 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/29 21:47:11 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/15 21:03:13 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/15 21:18:50 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
-#define FOUND_DIR (type == 'd' && S_ISDIR(path_stat.st_mode))
-#define FOUND_FILE (type == 'f' && S_ISREG(path_stat.st_mode))
+#define FOUND_DIR S_ISDIR(path_stat.st_mode)
+#define FOUND_FILE S_ISREG(path_stat.st_mode)
 
-
-#include <errno.h>
-#include <string.h>
 /*
 * Flags XXXXX : R a l r t
 * The five required flags are above
@@ -38,7 +35,7 @@ static int	is_dupl(char *flags, char f)
 	return (0);
 }
 
-char	*parse_ls_flags(char **argv, int amount)
+char	*parse_ls_flags(char **av, int amount)
 {
 	int		i;
 	int		j;
@@ -48,18 +45,18 @@ char	*parse_ls_flags(char **argv, int amount)
 	flagcounter = 0;
 	i = 1;
 	flags = ft_strdup("XXXXX");
-	while (argv[i] && i < amount + 1)
+	while (av[i] && i < amount + 1)
 	{
 		j = 0;
-		while (argv[i][j])
+		while (av[i][j])
 		{
-			if (argv[i][0] == '-' && (j > 0 && !ft_strchr("Ralrt", (argv[i][j]))))
+			if (av[i][0] == '-' && (j > 0 && !ft_strchr("Ralrt", (av[i][j]))))
 			{
 				flags[0] = 'E';
 				return (flags);
 			}
-			if (argv[i][0] == '-' && j > 0 && !is_dupl(flags, argv[i][j]))
-				flags[flagcounter++] = argv[i][j];
+			if (av[i][0] == '-' && j > 0 && !is_dupl(flags, av[i][j]))
+				flags[flagcounter++] = av[i][j];
 			j++;
 		}
 		i++;
@@ -67,49 +64,52 @@ char	*parse_ls_flags(char **argv, int amount)
 	return (flags);
 }
 
-static int	count_target_amount(char **argv, int flag_args, t_data *data, char type)
+static int	count_target_amount(char **av, int flag_args, t_data *data, \
+		char type)
 {
-	struct	stat path_stat;
-	int	amount;
-	int	i;
+	struct stat	path_stat;
+	int			amount;
+	int			i;
 
 	amount = 0;
 	i = 0;
-	while ((flag_args + i + 1) < data->argc)
+	while ((flag_args + i + 1) < data->ac)
 	{
 		i++;
-   		if (stat(argv[flag_args + i], &path_stat) == 0) {
-			if (FOUND_DIR || FOUND_FILE)
+		if (stat(av[flag_args + i], &path_stat) == 0)
+		{
+			if ((type == 'd' && FOUND_DIR) || (type == 'f' && FOUND_FILE))
 				amount += 1;
-		} else {
-			if (type == 'f' && !arg_is_in_dir_targets(argv[flag_args + i], data)) 
-				print_no_such_file(argv[flag_args + i]);
+		}
+		else
+		{
+			if (type == 'f' && !arg_in_dirtargets(av[flag_args + i], data))
+				print_no_such_file(av[flag_args + i]);
 		}
 	}
-
 	return (amount);
 }
 
 //Something in printf is fucked
-char	**find_targets(char **argv, int flag_args, t_data *data, char type)
+char	**find_targets(char **av, int flag_args, t_data *data, char type)
 {
 	struct stat	path_stat;
-	char	**targets;
-	int	amount;
-	int	i;
+	char		**targets;
+	int			amount;
+	int			i;
 
 	amount = 0;
-	amount = count_target_amount(argv, flag_args, data, type);
-
+	amount = count_target_amount(av, flag_args, data, type);
 	if (amount == 0)
 		return (NULL);
 	targets = (char **)malloc((amount + 1) * sizeof(char *));
 	i = 0;
-	while ((flag_args + 1) < data->argc)
+	while ((flag_args + 1) < data->ac)
 	{
-		if (stat(argv[flag_args + 1], &path_stat) == 0){
-			if (FOUND_DIR || FOUND_FILE)
-				targets[i++] = ft_strdup(argv[flag_args + 1]);
+		if (stat(av[flag_args + 1], &path_stat) == 0)
+		{
+			if ((type == 'd' && FOUND_DIR) || (type == 'f' && FOUND_FILE))
+				targets[i++] = ft_strdup(av[flag_args + 1]);
 		}
 		flag_args++;
 	}
@@ -117,18 +117,18 @@ char	**find_targets(char **argv, int flag_args, t_data *data, char type)
 	return (targets);
 }
 
-t_data	*parse_input(int argc, char** argv)
+t_data	*parse_input(int ac, char **av)
 {
-	int	number_of_flag_arguments;
+	int		number_of_flag_arguments;
 	t_data	*data;
-	
+
 	data = (t_data *)malloc(sizeof(t_data));
-	data->argc = argc;
-	number_of_flag_arguments = number_of_flags(argc, argv);
-	data->flags = parse_ls_flags(argv, number_of_flag_arguments);
-	data->targetdirs = find_targets(argv, number_of_flag_arguments, data, 'd');
-	data->targetfiles = find_targets(argv, number_of_flag_arguments, data, 'f');
+	data->ac = ac;
+	number_of_flag_arguments = number_of_flags(ac, av);
+	data->flags = parse_ls_flags(av, number_of_flag_arguments);
+	data->targetdirs = find_targets(av, number_of_flag_arguments, data, 'd');
+	data->targetfiles = find_targets(av, number_of_flag_arguments, data, 'f');
 	if (data->flags[0] == 'E')
-		error_and_exit("invalid flag\n", data->flags);	
+		error_and_exit("invalid flag\n", data->flags);
 	return (data);
 }
