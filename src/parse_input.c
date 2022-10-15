@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/29 21:47:11 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/15 23:48:31 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/15 23:49:21 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ char	*parse_ls_flags(char **av, int amount)
 			{
 				if (!is_dupl(flags, av[i][j]))
 					flags[flagcounter++] = av[i][j];
-					
 			}
 			j++;
 		}
