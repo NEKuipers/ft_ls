@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/15 21:08:53 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/16 00:52:34 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/16 20:54:38 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,45 @@ void	error_and_exit(char *reason, char *flags)
 	exit(1);
 }
 
-//TODO write funcions that free the directory and file objects
-
-void	free_data(t_data *data)
+//TODO write funcions that free the directory and file objects (getting segfaults rn)
+void	free_input(t_input *input)
 {
 	int	i;
 
 	i = 0;
-	if (data->flags)
-		free(data->flags);
-	if (data->dir_operands)
+	if (input->flags)
+		free(input->flags);
+	if (input->dir_operands)
 	{
-		while (data->dir_operands[i] != NULL)
-			free(data->dir_operands[i++]);
-		free(data->dir_operands);
+		while (input->dir_operands[i] != NULL)
+			free(input->dir_operands[i++]);
+		free(input->dir_operands);
 	}
 	i = 0;
-	if (data->file_operands)
+	if (input->file_operands)
 	{
-		while (data->file_operands[i] != NULL)
-			free(data->file_operands[i++]);
-		free(data->file_operands);
+		while (input->file_operands[i] != NULL)
+			free(input->file_operands[i++]);
+		free(input->file_operands);
 	}
-	free(data);
+}
+
+void	free_data(t_data data)
+{
+	int	i;
+	
+	if (data.flags)
+		free(data.flags);	
+	i = 0;
+	(void)i;
+	if (data.found_files != NULL)
+	{
+		// while (data->found_files[i] != NULL)
+		// {
+		// 	free(data->found_files[i]->filename);
+		// 	free(data->found_files[i]);
+		// 	i++;
+		// }
+		// free(data->found_files);
+	}
 }

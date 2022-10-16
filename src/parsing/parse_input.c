@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/29 21:47:11 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/16 00:37:03 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/16 20:39:18 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*parse_ls_flags(char **av, int amount)
 	return (flags);
 }
 
-static int	count_operand_amount(char **av, int flag_args, t_data *data, \
+static int	count_operand_amount(char **av, int flag_args, t_input *input, \
 		char type)
 {
 	struct stat	path_stat;
@@ -69,7 +69,7 @@ static int	count_operand_amount(char **av, int flag_args, t_data *data, \
 
 	amount = 0;
 	i = 0;
-	while ((flag_args + i + 1) < data->ac)
+	while ((flag_args + i + 1) < input->ac)
 	{
 		i++;
 		if (stat(av[flag_args + i], &path_stat) == 0)
@@ -80,7 +80,7 @@ static int	count_operand_amount(char **av, int flag_args, t_data *data, \
 		}
 		else
 		{
-			if (type == 'f' && !arg_in_dir_operands(av[flag_args + i], data))
+			if (type == 'f' && !arg_in_dir_operands(av[flag_args + i], input))
 				print_file_not_found(av[flag_args + i]);
 		}
 	}
@@ -88,7 +88,7 @@ static int	count_operand_amount(char **av, int flag_args, t_data *data, \
 }
 
 //Something in printf is fucked when using multiple variables...
-char	**find_operands(char **av, int flag_args, t_data *data, char type)
+char	**find_operands(char **av, int flag_args, t_input *input, char type)
 {
 	struct stat	path_stat;
 	char		**targets;
@@ -96,12 +96,12 @@ char	**find_operands(char **av, int flag_args, t_data *data, char type)
 	int			i;
 
 	amount = 0;
-	amount = count_operand_amount(av, flag_args, data, type);
+	amount = count_operand_amount(av, flag_args, input, type);
 	if (amount == 0)
 		return (NULL);
 	targets = (char **)malloc((amount + 1) * sizeof(char *));
 	i = 0;
-	while ((flag_args + 1) < data->ac)
+	while ((flag_args + 1) < input->ac)
 	{
 		if (stat(av[flag_args + 1], &path_stat) == 0)
 		{
@@ -115,18 +115,18 @@ char	**find_operands(char **av, int flag_args, t_data *data, char type)
 	return (targets);
 }
 
-t_data	*parse_input(int ac, char **av)
+t_input	*parse_input(int ac, char **av)
 {
 	int		number_of_flag_arguments;
-	t_data	*data;
+	t_input	*input;
 
-	data = (t_data *)malloc(sizeof(t_data));
-	data->ac = ac;
+	input = (t_input *)malloc(sizeof(t_input));
+	input->ac = ac;
 	number_of_flag_arguments = number_of_flags(ac, av);
-	data->flags = parse_ls_flags(av, number_of_flag_arguments);
-	data->dir_operands = find_operands(av, number_of_flag_arguments, data, 'd');
-	data->file_operands = find_operands(av, number_of_flag_arguments, data, 'f');
-	if (data->flags[0] == 'E')
-		error_and_exit("invalid flag\n", data->flags);
-	return (data);
+	input->flags = parse_ls_flags(av, number_of_flag_arguments);
+	input->dir_operands = find_operands(av, number_of_flag_arguments, input, 'd');
+	input->file_operands = find_operands(av, number_of_flag_arguments, input, 'f');
+	if (input->flags[0] == 'E')
+		error_and_exit("invalid flag\n", input->flags);
+	return (input);
 }

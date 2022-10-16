@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/15 19:29:22 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/16 00:31:41 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/16 20:40:07 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,16 @@ int	number_of_flags(int ac, char **av)
 	return (i - 1);
 }
 
-int	arg_in_dir_operands(char *arg, t_data *data)
+int	arg_in_dir_operands(char *arg, t_input *input)
 {
 	int	i;
 
-	if (data->dir_operands == NULL)
+	if (input->dir_operands == NULL)
 		return (0);
 	i = 0;
-	while (data->dir_operands[i])
+	while (input->dir_operands[i])
 	{
-		if (ft_strcmp(arg, data->dir_operands[i]) == 0)
+		if (ft_strcmp(arg, input->dir_operands[i]) == 0)
 			return (1);
 		i++;
 	}
