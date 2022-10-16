@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/27 17:49:31 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/16 20:54:55 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/16 23:33:11 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,5 @@ int	main(int ac, char **av)
 	// print_data(data);
 	free_input(input);
 	free_data(data);
-	while(1);
 	return (0);
 }

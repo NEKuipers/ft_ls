@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/29 21:47:11 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/16 20:39:18 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/16 22:32:09 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*parse_ls_flags(char **av, int amount)
 static int	count_operand_amount(char **av, int flag_args, t_input *input, \
 		char type)
 {
-	struct stat	path_stat;
+	struct stat	buf;
 	int			amount;
 	int			i;
 
@@ -72,10 +72,10 @@ static int	count_operand_amount(char **av, int flag_args, t_input *input, \
 	while ((flag_args + i + 1) < input->ac)
 	{
 		i++;
-		if (stat(av[flag_args + i], &path_stat) == 0)
+		if (stat(av[flag_args + i], &buf) == 0)
 		{
-			if ((type == 'd' && S_ISDIR(path_stat.st_mode)) || \
-				(type == 'f' && S_ISREG(path_stat.st_mode)))
+			if ((type == 'd' && S_ISDIR(buf.st_mode)) || \
+				(type == 'f' && S_ISREG(buf.st_mode)))
 				amount += 1;
 		}
 		else
@@ -90,7 +90,7 @@ static int	count_operand_amount(char **av, int flag_args, t_input *input, \
 //Something in printf is fucked when using multiple variables...
 char	**find_operands(char **av, int flag_args, t_input *input, char type)
 {
-	struct stat	path_stat;
+	struct stat	buf;
 	char		**targets;
 	int			amount;
 	int			i;
@@ -103,10 +103,10 @@ char	**find_operands(char **av, int flag_args, t_input *input, char type)
 	i = 0;
 	while ((flag_args + 1) < input->ac)
 	{
-		if (stat(av[flag_args + 1], &path_stat) == 0)
+		if (stat(av[flag_args + 1], &buf) == 0)
 		{
-			if ((type == 'd' && S_ISDIR(path_stat.st_mode)) || \
-				(type == 'f' && S_ISREG(path_stat.st_mode)))
+			if ((type == 'd' && S_ISDIR(buf.st_mode)) || \
+				(type == 'f' && S_ISREG(buf.st_mode)))
 				targets[i++] = ft_strdup(av[flag_args + 1]);
 		}
 		flag_args++;
@@ -126,7 +126,5 @@ t_input	*parse_input(int ac, char **av)
 	input->flags = parse_ls_flags(av, number_of_flag_arguments);
 	input->dir_operands = find_operands(av, number_of_flag_arguments, input, 'd');
 	input->file_operands = find_operands(av, number_of_flag_arguments, input, 'f');
-	if (input->flags[0] == 'E')
-		error_and_exit("invalid flag\n", input->flags);
 	return (input);
 }

@@ -6,24 +6,23 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/15 21:08:53 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/16 20:54:38 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/16 23:32:49 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void	error_and_exit(char *reason, char *flags)
+void	error_and_exit(char *reason, t_data data)
 {
 	char	*errormessage;
 
 	errormessage = ft_strjoin("Error: ", reason);
 	write(2, errormessage, ft_strlen(errormessage));
 	free(errormessage);
-	free(flags);
+	free_data(data);
 	exit(1);
 }
 
-//TODO write funcions that free the directory and file objects (getting segfaults rn)
 void	free_input(t_input *input)
 {
 	int	i;
@@ -51,17 +50,18 @@ void	free_data(t_data data)
 	int	i;
 	
 	if (data.flags)
-		free(data.flags);	
+		free(data.flags);
 	i = 0;
-	(void)i;
 	if (data.found_files != NULL)
 	{
-		// while (data->found_files[i] != NULL)
-		// {
-		// 	free(data->found_files[i]->filename);
-		// 	free(data->found_files[i]);
-		// 	i++;
-		// }
-		// free(data->found_files);
+		while (data.found_files[i] != NULL)
+		{
+			free(data.found_files[i]->filename);
+			free(data.found_files[i]->permissions);
+			free(data.found_files[i]->owner_name);
+			free(data.found_files[i]->owner_group);
+			free(data.found_files[i]);
+			i++;
+		}
 	}
 }
