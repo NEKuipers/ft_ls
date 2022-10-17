@@ -6,13 +6,13 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/15 21:08:53 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/16 23:32:49 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/17 18:07:48 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void	error_and_exit(char *reason, t_data data)
+void	error_and_exit(char *reason, t_data *data)
 {
 	char	*errormessage;
 
@@ -23,45 +23,102 @@ void	error_and_exit(char *reason, t_data data)
 	exit(1);
 }
 
-void	free_input(t_input *input)
-{
-	int	i;
-
-	i = 0;
-	if (input->flags)
-		free(input->flags);
-	if (input->dir_operands)
-	{
-		while (input->dir_operands[i] != NULL)
-			free(input->dir_operands[i++]);
-		free(input->dir_operands);
-	}
-	i = 0;
-	if (input->file_operands)
-	{
-		while (input->file_operands[i] != NULL)
-			free(input->file_operands[i++]);
-		free(input->file_operands);
-	}
-}
-
-void	free_data(t_data data)
+void	free_array(char **array)
 {
 	int	i;
 	
-	if (data.flags)
-		free(data.flags);
 	i = 0;
-	if (data.found_files != NULL)
+	if (array)
 	{
-		while (data.found_files[i] != NULL)
+		while (array[i] != NULL) {
+			free(array[i]);
+			i++;
+		}
+		free(array);
+	}
+}
+
+void	free_input(t_input *input)
+{
+	if (input->flags)
+		free(input->flags);
+	free_array(input->dir_operands);
+	free(input);
+}
+
+void	free_files(t_file **files)
+{
+	int	i;
+
+	i = 0;
+	if (files != NULL)
+	{
+		while (files[i] != NULL)
 		{
-			free(data.found_files[i]->filename);
-			free(data.found_files[i]->permissions);
-			free(data.found_files[i]->owner_name);
-			free(data.found_files[i]->owner_group);
-			free(data.found_files[i]);
+			free(files[i]->filename);
+			free(files[i]->permissions);
+			free(files[i]->owner_name);
+			free(files[i]->owner_group);
+			free(files[i]);
 			i++;
 		}
 	}
+}
+
+void	free_data(t_data *data)
+{
+	int i;
+
+	i = 0;
+	if (data->flags)
+		free(data->flags);
+	if (data->files)
+		free_files(data->files);
+	if (data->directories)
+	{
+		while (data->directories[i])
+		{
+			free_files(data->directories[i]->files);
+			free(data->directories[i]->files);
+			free(data->directories[i]->dir_path);
+			free(data->directories[i]);
+			i++;
+		}
+		free(data->directories);
+	}
+	free(data);
+}
+
+void	el()
+{
+	write(2, "Check\n", 6);
+}
+
+char	*join_path(char const *s1, char const *s2)
+{
+	int		i;
+	int		j;
+	char	*new;
+
+	i = 0;
+	j = 0;
+	if (s1 == 0 || s2 == 0)
+		return (NULL);
+	new = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 2));
+	if (new == 0)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		new[i] = s1[i];
+		i++;
+	}
+	new[i++] = '/';
+	while (s2[j] != '\0')
+	{
+		new[i] = s2[j];
+		i++;
+		j++;
+	}
+	new[i] = '\0';
+	return (new);
 }

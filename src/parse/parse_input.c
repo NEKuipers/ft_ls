@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/29 21:47:11 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/16 22:32:09 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/17 18:16:00 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static int	count_operand_amount(char **av, int flag_args, t_input *input, \
 char	**find_operands(char **av, int flag_args, t_input *input, char type)
 {
 	struct stat	buf;
-	char		**targets;
+	char		**operands;
 	int			amount;
 	int			i;
 
@@ -99,7 +99,7 @@ char	**find_operands(char **av, int flag_args, t_input *input, char type)
 	amount = count_operand_amount(av, flag_args, input, type);
 	if (amount == 0)
 		return (NULL);
-	targets = (char **)malloc((amount + 1) * sizeof(char *));
+	operands = (char **)malloc((amount + 1) * sizeof(char *));
 	i = 0;
 	while ((flag_args + 1) < input->ac)
 	{
@@ -107,24 +107,24 @@ char	**find_operands(char **av, int flag_args, t_input *input, char type)
 		{
 			if ((type == 'd' && S_ISDIR(buf.st_mode)) || \
 				(type == 'f' && S_ISREG(buf.st_mode)))
-				targets[i++] = ft_strdup(av[flag_args + 1]);
+				operands[i++] = ft_strdup(av[flag_args + 1]);
 		}
 		flag_args++;
 	}
-	targets[i] = NULL;
-	return (targets);
+	operands[i] = NULL;
+	return (operands);
 }
 
 t_input	*parse_input(int ac, char **av)
 {
-	int		number_of_flag_arguments;
+	int		no_of_flag_args;
 	t_input	*input;
 
 	input = (t_input *)malloc(sizeof(t_input));
 	input->ac = ac;
-	number_of_flag_arguments = number_of_flags(ac, av);
-	input->flags = parse_ls_flags(av, number_of_flag_arguments);
-	input->dir_operands = find_operands(av, number_of_flag_arguments, input, 'd');
-	input->file_operands = find_operands(av, number_of_flag_arguments, input, 'f');
+	no_of_flag_args = number_of_flags(ac, av);
+	input->flags = parse_ls_flags(av, no_of_flag_args);
+	input->dir_operands = find_operands(av, no_of_flag_args, input, 'd');
+	input->file_operands = find_operands(av, no_of_flag_args, input, 'f');
 	return (input);
 }

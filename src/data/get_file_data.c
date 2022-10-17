@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   find_files.c                                       :+:    :+:            */
+/*   get_file_data->c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/16 00:25:46 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/16 23:31:27 by nickkuipers   ########   odam.nl         */
+/*   Created: 2022/10/17 13:35:02 by nickkuipers   #+#    #+#                 */
+/*   Updated: 2022/10/17 17:19:40 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,8 @@
 #include <pwd.h>
 #include <grp.h>
 #include <uuid/uuid.h>
-/*
- *	figure out which data to get based on operands and flags:
- *		- get a list of targets from operands
- *	 	- get data from the targets based on flags: 
- *	    	- a includes hidden files/dirs (start with .)
- *	     	- l is long format
- * 			- R is recursive, going all the way down...
- * 		files always go before directories
- */
 
-char	*get_file_permissions(int fd)
+static char	*get_file_permissions(int fd)
 {
 	char	*permissions;
 
@@ -54,7 +45,7 @@ char	*get_file_permissions(int fd)
 	return (permissions);
 }
 
-t_file	*get_file_info(char *filename)
+t_file	*get_file_data(char *filename)
 {
 	t_file			*file;
 	struct stat		buf;
@@ -64,49 +55,15 @@ t_file	*get_file_info(char *filename)
 	file->filename = ft_strdup(filename);
 	if (stat(file->filename, &buf) == 0)
 	{
+		//TODO consider symbolic links (lstat()?)
 		file->permissions = get_file_permissions(buf.st_mode);
 		file->number_of_links = buf.st_nlink;
 		file->owner_group = ft_strdup(getgrgid(buf.st_gid)->gr_name);
 		file->owner_name = ft_strdup(getpwuid(buf.st_uid)->pw_name);
 		file->file_size = buf.st_size;
 		file->last_modified_time = buf.st_mtime;
-		file->blocks = buf.st_blocks;
-		//TODO getgrid/pwuid return NULL if unset for some reason. handle error
 	}
-	// else
-	// {
-	// 	; //TODO handle error
-	// }
+	else
+		return NULL; //TODO error handling
 	return (file);
-}
-
-t_data	get_data(t_input *input)
-{
-	int		i;
-	t_data	data;
-
-	i = 0;
-	data.flags = ft_strdup(input->flags);
-	if (input->dir_operands == NULL && input->file_operands == NULL)
-	{
-		input->dir_operands = (char **)malloc(sizeof(char *) * 2);
-		input->dir_operands[0] = ft_strdup(".");
-		input->dir_operands[1] = NULL;
-	}
-	if (input->file_operands != NULL)
-	{
-		while (input->file_operands[i])
-			i++;
-		data.found_files = (t_file **)malloc(sizeof(t_file) * (i + 1));
-		data.found_files[i] = NULL;
-		i = 0;
-		while (input->file_operands[i])
-		{
-			data.found_files[i] = get_file_info(input->file_operands[i]);
-			i++;
-		}
-	}
-	// if (data->dir_operands != NULL)
-	// 	get_dir_information(data);
-	return (data);
 }

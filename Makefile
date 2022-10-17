@@ -6,15 +6,17 @@
 #    By: nkuipers <nkuipers@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/03/03 12:40:13 by nkuipers      #+#    #+#                  #
-#    Updated: 2022/10/16 00:36:35 by nickkuipers   ########   odam.nl          #
+#    Updated: 2022/10/17 14:10:44 by nickkuipers   ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			=	ft_ls
 SRCS			=	main.c \
-					filedata/find_files.c \
-					parsing/parse_input.c \
-					parsing/parse_utils.c \
+					data/get_data.c \
+					data/get_dir_data.c \
+					data/get_file_data.c \
+					parse/parse_input.c \
+					parse/parse_utils.c \
 					utils.c
 CFILES      	=   $(SRCS:%=src/%)
 OFILES      	=   $(CFILES:.c=.o)

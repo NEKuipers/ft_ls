@@ -6,13 +6,13 @@
 /*   By: nkuipers <nkuipers@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/03/03 12:40:45 by nkuipers      #+#    #+#                 */
-/*   Updated: 2022/10/16 23:23:10 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/17 18:08:22 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
-
+# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <dirent.h>
@@ -31,21 +31,20 @@ typedef struct s_file
 	char			*owner_group;
 	int				file_size;
 	long			last_modified_time;
-	int				blocks;
 }					t_file;
 
 typedef struct s_directory
 {
 	char		*dir_path;
 	int			blocks;
-	t_file		*file;
+	t_file		**files; //this also includes directories as files
 }				t_directory;
 
 typedef struct s_data
 {
-	char		*flags; //TODO move flags to data struct
-	t_directory	**found_dirs;
-	t_file		**found_files;
+	char		*flags;
+	t_directory	**directories;
+	t_file		**files;
 }				t_data;
 
 typedef struct s_input
@@ -70,15 +69,22 @@ int				number_of_flags(int ac, char **av);
 /*
  * File data
  */
-t_data			get_data(t_input *input);
-t_file			*get_file_info(char *filename);
-char			*get_file_permissions(int fd);
+t_data			*get_data(t_input *input);
+t_file			**get_files_from_operands(char **file_operands);
+t_file			*get_file_data(char *filename);
+t_directory 	**get_dirs_from_operands(char **dir_operands, char *flags);
+t_directory		*get_directory_data(char *dirname);
+
+
 
 /*
  * Utils
  */
 void			free_input(t_input *input);
-void			free_data(t_data data);
-void			error_and_exit(char *reason, t_data data);
+void			free_array(char **array);
+void			free_data(t_data *data);
+void			error_and_exit(char *reason, t_data *data);
+char			*join_path(char const *s1, char const *s2);
+void			el();
 
 #endif
