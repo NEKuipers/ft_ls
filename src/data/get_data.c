@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_data->c                                         :+:    :+:            */
+/*   get_data.c                                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/16 00:25:46 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/17 18:07:06 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/17 19:51:18 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,18 @@ t_file	**get_files_from_operands(char **file_operands)
 	while (file_operands[i])
 		i++;
 	files = (t_file **)malloc(sizeof(t_file) * (i + 1));
-	files[i] = NULL;
 	i = 0;
 	while (file_operands[i])
 	{
 		files[i] = get_file_data(file_operands[i]);
 		if (files[i] == NULL)
+		{
+			free_files(files);
 			return (NULL);
+		}
 		i++;
 	}
+	files[i] = NULL;
 	free_array(file_operands);
 	return (files);
 }
@@ -68,12 +71,11 @@ t_directory **get_dirs_from_operands(char **dir_operands, char *flags)
 	return (directories);
 }
 
-t_data	*get_data(t_input *input)
+t_data	get_data(t_input *input)
 {
-	t_data	*data;
+	t_data	data;
 
-	data = malloc(sizeof(t_data));
-	data->flags = ft_strdup(input->flags);
+	data.flags = ft_strdup(input->flags);
 	if (input->dir_operands == NULL && input->file_operands == NULL)
 	{
 		input->dir_operands = (char **)malloc(sizeof(char *) * 2);
@@ -82,15 +84,14 @@ t_data	*get_data(t_input *input)
 	}
 	if (input->file_operands != NULL)
 	{
-		data->files = get_files_from_operands(input->file_operands);
-		if (data->files == NULL)
+		data.files = get_files_from_operands(input->file_operands);
+		if (data.files == NULL)
 		{
 			free_input(input);
 			error_and_exit(" something went wrong opening file.", data);
-			//TODO restructure error handling of file/dir parsing
 		}
 	}
 	if (input->dir_operands != NULL)
-		data->directories = get_dirs_from_operands(input->dir_operands, data->flags);
+		data.directories = get_dirs_from_operands(input->dir_operands, data.flags);
 	return (data);
 }

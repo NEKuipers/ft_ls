@@ -6,20 +6,20 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/15 21:08:53 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/17 18:07:48 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/17 19:51:45 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_ls.h"
 
-void	error_and_exit(char *reason, t_data *data)
+void	error_and_exit(char *reason, t_data data)
 {
 	char	*errormessage;
 
 	errormessage = ft_strjoin("Error: ", reason);
 	write(2, errormessage, ft_strlen(errormessage));
 	free(errormessage);
-	free_data(data);
+	free_data(&data);
 	exit(1);
 }
 
@@ -43,7 +43,6 @@ void	free_input(t_input *input)
 	if (input->flags)
 		free(input->flags);
 	free_array(input->dir_operands);
-	free(input);
 }
 
 void	free_files(t_file **files)
@@ -86,7 +85,6 @@ void	free_data(t_data *data)
 		}
 		free(data->directories);
 	}
-	free(data);
 }
 
 void	el()

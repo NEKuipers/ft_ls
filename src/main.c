@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/27 17:49:31 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/17 18:17:57 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/17 19:54:44 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 
 int	main(int ac, char **av)
 {
-	t_input *input;
-	t_data	*data;
+	t_input input;
+	t_data	data;
 	
 	input = parse_input(ac, av);
-	data = get_data(input);
+	data = get_data(&input);
+	free_input(&input);
 	// sort_data(data);
 	// print_data(data);
-	free_input(input);
-	free_data(data);
+	free_data(&data);
+	while(1);
 	return (0);
 }

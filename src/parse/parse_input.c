@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/29 21:47:11 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/17 18:16:00 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/17 19:49:29 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*parse_ls_flags(char **av, int amount)
 	return (flags);
 }
 
-static int	count_operand_amount(char **av, int flag_args, t_input *input, \
+static int	count_operand_amount(char **av, int flag_args, t_input input, \
 		char type)
 {
 	struct stat	buf;
@@ -69,7 +69,7 @@ static int	count_operand_amount(char **av, int flag_args, t_input *input, \
 
 	amount = 0;
 	i = 0;
-	while ((flag_args + i + 1) < input->ac)
+	while ((flag_args + i + 1) < input.ac)
 	{
 		i++;
 		if (stat(av[flag_args + i], &buf) == 0)
@@ -88,7 +88,7 @@ static int	count_operand_amount(char **av, int flag_args, t_input *input, \
 }
 
 //Something in printf is fucked when using multiple variables...
-char	**find_operands(char **av, int flag_args, t_input *input, char type)
+char	**find_operands(char **av, int flag_args, t_input input, char type)
 {
 	struct stat	buf;
 	char		**operands;
@@ -101,7 +101,7 @@ char	**find_operands(char **av, int flag_args, t_input *input, char type)
 		return (NULL);
 	operands = (char **)malloc((amount + 1) * sizeof(char *));
 	i = 0;
-	while ((flag_args + 1) < input->ac)
+	while ((flag_args + 1) < input.ac)
 	{
 		if (stat(av[flag_args + 1], &buf) == 0)
 		{
@@ -115,16 +115,15 @@ char	**find_operands(char **av, int flag_args, t_input *input, char type)
 	return (operands);
 }
 
-t_input	*parse_input(int ac, char **av)
+t_input	parse_input(int ac, char **av)
 {
 	int		no_of_flag_args;
-	t_input	*input;
+	t_input	input;
 
-	input = (t_input *)malloc(sizeof(t_input));
-	input->ac = ac;
+	input.ac = ac;
 	no_of_flag_args = number_of_flags(ac, av);
-	input->flags = parse_ls_flags(av, no_of_flag_args);
-	input->dir_operands = find_operands(av, no_of_flag_args, input, 'd');
-	input->file_operands = find_operands(av, no_of_flag_args, input, 'f');
+	input.flags = parse_ls_flags(av, no_of_flag_args);
+	input.dir_operands = find_operands(av, no_of_flag_args, input, 'd');
+	input.file_operands = find_operands(av, no_of_flag_args, input, 'f');
 	return (input);
 }

@@ -6,7 +6,7 @@
 /*   By: nkuipers <nkuipers@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/03/03 12:40:45 by nkuipers      #+#    #+#                 */
-/*   Updated: 2022/10/17 18:08:22 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/17 19:51:26 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,18 @@ typedef struct s_input
 /*
  * Parsing
  */
-t_input			*parse_input(int ac, char **av);
+t_input			parse_input(int ac, char **av);
 char			*parse_ls_flags(char **av, int amount);
 char			**find_operands(char **av, int flag_args, \
-					t_input *input, char type);
-int				arg_in_dir_operands(char *arg, t_input *input);
+					t_input input, char type);
+int				arg_in_dir_operands(char *arg, t_input input);
 void			print_file_not_found(char *target);
 int				number_of_flags(int ac, char **av);
 
 /*
  * File data
  */
-t_data			*get_data(t_input *input);
+t_data			get_data(t_input *input);
 t_file			**get_files_from_operands(char **file_operands);
 t_file			*get_file_data(char *filename);
 t_directory 	**get_dirs_from_operands(char **dir_operands, char *flags);
@@ -83,7 +83,8 @@ t_directory		*get_directory_data(char *dirname);
 void			free_input(t_input *input);
 void			free_array(char **array);
 void			free_data(t_data *data);
-void			error_and_exit(char *reason, t_data *data);
+void			free_files(t_file **files);
+void			error_and_exit(char *reason, t_data data);
 char			*join_path(char const *s1, char const *s2);
 void			el();
 

@@ -50,10 +50,10 @@ t_file	*get_file_data(char *filename)
 	t_file			*file;
 	struct stat		buf;
 
-	file = (t_file *)malloc(sizeof(t_file));
+	file = (t_file *)malloc(sizeof(t_file)); //here
 	ft_memset(file, '\0', sizeof(t_file));
 	file->filename = ft_strdup(filename);
-	if (stat(file->filename, &buf) == 0)
+	if (stat(filename, &buf) == 0)
 	{
 		//TODO consider symbolic links (lstat()?)
 		file->permissions = get_file_permissions(buf.st_mode);
