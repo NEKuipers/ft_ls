@@ -6,7 +6,7 @@
 /*   By: nkuipers <nkuipers@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/03/03 12:40:45 by nkuipers      #+#    #+#                 */
-/*   Updated: 2022/10/18 16:00:59 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/18 17:05:16 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_file
 	char			*owner_group;
 	int				file_size;
 	long			last_modified_time;
+	int				is_hidden;
 }					t_file;
 
 typedef struct s_directory
@@ -46,6 +47,7 @@ typedef struct s_data
 	char		*flags;
 	t_directory	**directories;
 	t_file		**files;
+	int			first_dir_operand_flag;
 }				t_data;
 
 typedef struct s_input
@@ -87,6 +89,9 @@ void			free_data(t_data *data);
 void			free_files(t_file **files);
 void			error_and_exit(char *reason, t_data data);
 char			*join_path(char const *s1, char const *s2);
+char			**string_array_join(char **s1, char **s2);
+char			**add_string_to_array_front(char *s1, char **s2);
+int				arr_size(char **array);
 void			el();
 
 #endif

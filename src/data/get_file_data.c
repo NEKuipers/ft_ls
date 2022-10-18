@@ -76,6 +76,9 @@ t_file	*get_file_data(char *filepath)
 		file->owner_name = ft_strdup(getpwuid(buf.st_uid)->pw_name);
 		file->file_size = buf.st_size;
 		file->last_modified_time = buf.st_mtime;
+		file->is_hidden = 0;
+		if (file->filename[0] == '.')
+			file->is_hidden = 1;
 	}
 	else
 		return NULL; //TODO error handling

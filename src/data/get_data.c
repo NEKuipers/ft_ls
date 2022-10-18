@@ -6,7 +6,7 @@
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/10/16 00:25:46 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/17 19:51:18 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/18 23:00:23 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,45 @@ t_file	**get_files_from_operands(char **file_operands)
 	return (files);
 }
 
+char	**subdir_recursive(char *directory)
+{
+	DIR				*dir;
+	struct dirent	*dirp;
+	char			**new;
+	
+	new = NULL;
+	dir = opendir(directory);
+	while ((dirp = readdir(dir)) != NULL)
+	{
+		if (dirp->d_type == DT_DIR && ft_strcmp(directory, ".") != 0 && ft_strcmp(directory, "..") != 0)
+		{
+			return (string_array_join(new, subdir_recursive(dirp->d_name)));
+		}
+	}
+	closedir(dir);
+	return (new);
+}
+
+char	**find_subdirectories(char **dir_operands)
+{
+	int		i;
+	char	**new;
+	
+	i = 0;
+	new = NULL;
+	while (dir_operands[i] != NULL)
+		new = string_array_join(new, subdir_recursive(dir_operands[i++]));
+	return (new);
+}
+
 t_directory **get_dirs_from_operands(char **dir_operands, char *flags)
 {
 	t_directory	**directories;
 	int			i;
 
 	i = 0;
-	(void)flags;
-	// if (ft_strchr(flags, "R"))
-	// 	dir_operands = find_directories_recursively(dir_operands);
+	if (ft_strchr(flags, 'R'))
+		dir_operands = find_subdirectories(dir_operands);
 	while (dir_operands[i])
 		i++;
 	directories = (t_directory **)malloc(sizeof(t_directory) * (i + 1));
@@ -83,8 +113,10 @@ t_data	get_data(t_input *input)
 		input->dir_operands[0] = ft_strdup(".");
 		input->dir_operands[1] = NULL;
 	}
+	data.first_dir_operand_flag = arr_size(input->dir_operands);
 	if (input->file_operands != NULL)
 	{
+		data.first_dir_operand_flag = 0;
 		data.files = get_files_from_operands(input->file_operands);
 		if (data.files == NULL)
 		{
