@@ -35,6 +35,7 @@ char	**find_files_in_directory(char *dirname)
 		i++;
 	}
 	filenames[i] = NULL;
+	closedir(directory);
 	return (filenames);
 }
 
