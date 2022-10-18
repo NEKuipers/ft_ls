@@ -6,7 +6,7 @@
 /*   By: nkuipers <nkuipers@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/03/03 12:40:45 by nkuipers      #+#    #+#                 */
-/*   Updated: 2022/10/17 19:51:26 by nickkuipers   ########   odam.nl         */
+/*   Updated: 2022/10/18 16:00:59 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 typedef struct s_file
 {
+	char			*filepath;
 	char			*filename;
 	char			*permissions;
 	int				number_of_links;
@@ -71,7 +72,7 @@ int				number_of_flags(int ac, char **av);
  */
 t_data			get_data(t_input *input);
 t_file			**get_files_from_operands(char **file_operands);
-t_file			*get_file_data(char *filename);
+t_file			*get_file_data(char *filepath);
 t_directory 	**get_dirs_from_operands(char **dir_operands, char *flags);
 t_directory		*get_directory_data(char *dirname);
 

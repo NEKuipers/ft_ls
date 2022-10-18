@@ -6,7 +6,7 @@
 #    By: nkuipers <nkuipers@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/03/03 12:40:13 by nkuipers      #+#    #+#                  #
-#    Updated: 2022/10/17 14:10:44 by nickkuipers   ########   odam.nl          #
+#    Updated: 2022/10/18 15:10:33 by nickkuipers   ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ SRCS			=	main.c \
 					data/get_file_data.c \
 					parse/parse_input.c \
 					parse/parse_utils.c \
-					utils.c
+					utils/free.c \
+					utils/utils.c
 CFILES      	=   $(SRCS:%=src/%)
 OFILES      	=   $(CFILES:.c=.o)
 CFLAGS          =   -Wall -Wextra -Werror

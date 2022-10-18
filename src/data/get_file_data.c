@@ -45,15 +45,29 @@ static char	*get_file_permissions(int fd)
 	return (permissions);
 }
 
-t_file	*get_file_data(char *filename)
+char	*get_filename(char *filepath)
+{
+	int index;
+
+	if (!ft_strchr(filepath, '/'))
+		return (ft_strdup(filepath));
+	index = ft_strlen(filepath);
+	while (filepath[index - 1] != '/')
+		index--;
+	return (ft_substr(filepath, index, (ft_strlen(filepath) - index)));
+	
+}
+
+t_file	*get_file_data(char *filepath)
 {
 	t_file			*file;
 	struct stat		buf;
 
-	file = (t_file *)malloc(sizeof(t_file)); //here
+	file = (t_file *)malloc(sizeof(t_file));
 	ft_memset(file, '\0', sizeof(t_file));
-	file->filename = ft_strdup(filename);
-	if (stat(filename, &buf) == 0)
+	file->filepath = ft_strdup(filepath);
+	file->filename = get_filename(filepath);
+	if (stat(filepath, &buf) == 0)
 	{
 		//TODO consider symbolic links (lstat()?)
 		file->permissions = get_file_permissions(buf.st_mode);

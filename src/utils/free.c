@@ -1,27 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.c                                            :+:    :+:            */
+/*   free.c                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: nickkuipers <nickkuipers@student.codam.      +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/10/15 21:08:53 by nickkuipers   #+#    #+#                 */
-/*   Updated: 2022/10/17 19:51:45 by nickkuipers   ########   odam.nl         */
+/*   Created: 2022/10/18 15:09:01 by nickkuipers   #+#    #+#                 */
+/*   Updated: 2022/10/18 15:59:29 by nickkuipers   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/ft_ls.h"
-
-void	error_and_exit(char *reason, t_data data)
-{
-	char	*errormessage;
-
-	errormessage = ft_strjoin("Error: ", reason);
-	write(2, errormessage, ft_strlen(errormessage));
-	free(errormessage);
-	free_data(&data);
-	exit(1);
-}
+#include "../../includes/ft_ls.h"
 
 void	free_array(char **array)
 {
@@ -55,6 +44,7 @@ void	free_files(t_file **files)
 		while (files[i] != NULL)
 		{
 			free(files[i]->filename);
+			free(files[i]->filepath);
 			free(files[i]->permissions);
 			free(files[i]->owner_name);
 			free(files[i]->owner_group);
@@ -85,38 +75,4 @@ void	free_data(t_data *data)
 		}
 		free(data->directories);
 	}
-}
-
-void	el()
-{
-	write(2, "Check\n", 6);
-}
-
-char	*join_path(char const *s1, char const *s2)
-{
-	int		i;
-	int		j;
-	char	*new;
-
-	i = 0;
-	j = 0;
-	if (s1 == 0 || s2 == 0)
-		return (NULL);
-	new = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 2));
-	if (new == 0)
-		return (NULL);
-	while (s1[i] != '\0')
-	{
-		new[i] = s1[i];
-		i++;
-	}
-	new[i++] = '/';
-	while (s2[j] != '\0')
-	{
-		new[i] = s2[j];
-		i++;
-		j++;
-	}
-	new[i] = '\0';
-	return (new);
 }
