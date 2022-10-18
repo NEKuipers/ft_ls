@@ -61,6 +61,7 @@ void	free_files(t_file **files)
 			free(files[i]);
 			i++;
 		}
+        free(files);
 	}
 }
 
@@ -73,12 +74,11 @@ void	free_data(t_data *data)
 		free(data->flags);
 	if (data->files)
 		free_files(data->files);
-	if (data->directories)
+    if (data->directories)
 	{
 		while (data->directories[i])
 		{
 			free_files(data->directories[i]->files);
-			free(data->directories[i]->files);
 			free(data->directories[i]->dir_path);
 			free(data->directories[i]);
 			i++;

@@ -37,7 +37,6 @@ t_file	**get_files_from_operands(char **file_operands)
 		files[i] = get_file_data(file_operands[i]);
 		if (files[i] == NULL)
 		{
-			free_files(files);
 			return (NULL);
 		}
 		i++;
@@ -76,6 +75,8 @@ t_data	get_data(t_input *input)
 	t_data	data;
 
 	data.flags = ft_strdup(input->flags);
+    data.directories = NULL;
+    data.files = NULL;
 	if (input->dir_operands == NULL && input->file_operands == NULL)
 	{
 		input->dir_operands = (char **)malloc(sizeof(char *) * 2);

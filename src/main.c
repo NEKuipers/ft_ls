@@ -23,6 +23,5 @@ int	main(int ac, char **av)
 	// sort_data(data);
 	// print_data(data);
 	free_data(&data);
-	while(1);
 	return (0);
 }
