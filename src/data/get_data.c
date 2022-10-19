@@ -46,11 +46,11 @@ t_file	**get_files_from_operands(char **file_operands)
 	return (files);
 }
 
-char	**subdir_recursive(char *directory)
+char	*subdir_recursive(char *directory)
 {
 	DIR				*dir;
 	struct dirent	*dirp;
-	char			**new;
+	char			*new;
 
 	new = NULL;
 	dir = opendir(directory);
@@ -58,42 +58,40 @@ char	**subdir_recursive(char *directory)
 	{
 		if (ft_strcmp(dirp->d_name, ".") && ft_strcmp(dirp->d_name, "..") && dirp->d_type == DT_DIR)
 		{
-            new = string_array_join(new, subdir_recursive(join_path(directory, dirp->d_name)));
+            new = join_with_separator_f1(new, subdir_recursive(join_with_separator(directory, dirp->d_name, '/')), '|');
 		}
 	}
 	closedir(dir);
-    new = add_string_to_array_front(directory, new);
+    new = join_with_separator(directory, new, '|');
 	return (new);
 }
-//STRJOIN AND FT_SPLIT IS A BETTER WAY
+
 char	**find_subdirectories(char **dir_operands)
 {
 	int		i;
-	char	**new;
+	char	*new;
+    char    **ret;
 
 	i = 0;
 	new = NULL;
 	while (dir_operands[i] != NULL) {
-        new = string_array_join(new, subdir_recursive(dir_operands[i]));
+        new = join_with_separator_f1(new, subdir_recursive(dir_operands[i]), '|');
         i++;
     }
-	return (new);
+    free_array(dir_operands);
+    ret = ft_split(new, '|');
+    free(new);
+	return (ret);
 }
 
-t_directory **get_dirs_from_operands(char **dir_operands, char *flags)
+t_directory **get_dirs_from_operands(char **dir_operands)
 {
     t_directory **directories;
     int         i;
 
     i = 0;
-    if (ft_strchr(flags, 'R')) {
-        dir_operands = find_subdirectories(dir_operands);
-    }
     while (dir_operands[i] != NULL){
         i++;
-    }
-    for (int x = 0; dir_operands[x]; x++) {
-        ft_printf("%s\n", dir_operands[x]);
     }
 	directories = (t_directory **)malloc(sizeof(t_directory) * (i + 1));
 	directories[i] = NULL;
@@ -105,6 +103,7 @@ t_directory **get_dirs_from_operands(char **dir_operands, char *flags)
 			return (NULL);
 		i++;
 	}
+    free_array(dir_operands);
 	return (directories);
 }
 
@@ -133,6 +132,11 @@ t_data	get_data(t_input *input)
 		}
 	}
 	if (input->dir_operands != NULL)
-		data.directories = get_dirs_from_operands(input->dir_operands, data.flags);
+    {
+        if (ft_strchr(data.flags, 'R'))
+            data.directories = get_dirs_from_operands(find_subdirectories(input->dir_operands));
+        else
+            data.directories = get_dirs_from_operands(input->dir_operands);
+    }
 	return (data);
 }

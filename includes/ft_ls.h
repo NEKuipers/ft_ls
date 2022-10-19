@@ -75,7 +75,7 @@ int				number_of_flags(int ac, char **av);
 t_data			get_data(t_input *input);
 t_file			**get_files_from_operands(char **file_operands);
 t_file			*get_file_data(char *filepath);
-t_directory 	**get_dirs_from_operands(char **dir_operands, char *flags);
+t_directory 	**get_dirs_from_operands(char **dir_operands);
 t_directory		*get_directory_data(char *dirname);
 
 
@@ -88,10 +88,8 @@ void			free_array(char **array);
 void			free_data(t_data *data);
 void			free_files(t_file **files);
 void			error_and_exit(char *reason, t_data data);
-char			*join_path(char const *s1, char const *s2);
-char			**string_array_join(char **s1, char **s2);
-char			**add_string_to_array_front(char *s1, char **s2);
-char	        **str_to_str_array(char *s1);
+char			*join_with_separator(char *s1, char *s2, char sep);
+char	        *join_with_separator_f1(char *s1, char *s2, char sep);
 int				arr_size(char **array);
 void			el();
 

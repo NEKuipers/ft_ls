@@ -31,7 +31,7 @@ char	**find_files_in_directory(char *dirname)
 	i = 0;
 	while ((dirp = readdir(directory)) != NULL)
 	{
-		filenames[i] = join_path(dirname, dirp->d_name);
+		filenames[i] = join_with_separator(dirname, dirp->d_name, '/');
 		i++;
 	}
 	filenames[i] = NULL;

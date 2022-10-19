@@ -32,8 +32,6 @@ void	free_input(t_input *input)
 {
 	if (input->flags)
 		free(input->flags);
-//    if (input->dir_operands)
-//    	free_array(input->dir_operands);
 }
 
 void	free_files(t_file **files)
