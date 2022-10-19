@@ -20,6 +20,7 @@ int	main(int ac, char **av)
 	input = parse_input(ac, av);
 	data = get_data(&input);
 	free_input(&input);
+
 	// sort_data(data);
 	// print_data(data);
     free_data(&data);

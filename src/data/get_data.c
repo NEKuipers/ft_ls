@@ -51,7 +51,7 @@ char	**subdir_recursive(char *directory)
 	DIR				*dir;
 	struct dirent	*dirp;
 	char			**new;
-	
+
 	new = NULL;
 	dir = opendir(directory);
 	while ((dirp = readdir(dir)) != NULL)
@@ -65,16 +65,18 @@ char	**subdir_recursive(char *directory)
     new = add_string_to_array_front(directory, new);
 	return (new);
 }
-
+//STRJOIN AND FT_SPLIT IS A BETTER WAY
 char	**find_subdirectories(char **dir_operands)
 {
 	int		i;
 	char	**new;
-	
+
 	i = 0;
 	new = NULL;
-	while (dir_operands[i] != NULL)
-		new = string_array_join(new, subdir_recursive(dir_operands[i++]));
+	while (dir_operands[i] != NULL) {
+        new = string_array_join(new, subdir_recursive(dir_operands[i]));
+        i++;
+    }
 	return (new);
 }
 
@@ -84,13 +86,14 @@ t_directory **get_dirs_from_operands(char **dir_operands, char *flags)
     int         i;
 
     i = 0;
-    if (ft_strchr(flags, 'R'))
+    if (ft_strchr(flags, 'R')) {
         dir_operands = find_subdirectories(dir_operands);
-    for (int x = 0; dir_operands[x]; x++) {
-        ft_printf("%s\n", dir_operands[x]);
     }
     while (dir_operands[i] != NULL){
         i++;
+    }
+    for (int x = 0; dir_operands[x]; x++) {
+        ft_printf("%s\n", dir_operands[x]);
     }
 	directories = (t_directory **)malloc(sizeof(t_directory) * (i + 1));
 	directories[i] = NULL;
