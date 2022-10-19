@@ -1,15 +1,0 @@
-
-nc:S995"\Make the type of this parameter a pointer-to-const. The current type of "flags" is "char *".(¬Š‘¢
-9c:S1110"!Remove these useless parentheses.(‘Ëéºşÿÿÿÿ
-3c:S1110!"!Remove these useless parentheses.(¾¸Ô
-_c:S1345"MRefactor this code to not nest more than 3 if|for|do|while|switch statements.(«ş³
-Dc:S10665"1Merge this "if" statement with the enclosing one.(«ş³
-4c:S1110<"!Remove these useless parentheses.(ı ¸÷
-4c:S1110W"!Remove these useless parentheses.(ÜÌº³
-Cc:S1066l"1Merge this "if" statement with the enclosing one.(è°Ó2
-4c:S1110s"!Remove these useless parentheses.(¶­—ò
-:c:S1110€"!Remove these useless parentheses.(¦•Æøÿÿÿÿÿ
-qc:S836S"ZPassed-by-value struct argument contains uninitialized data (e.g., field: 'file_operands')(²„¼£şÿÿÿÿ
->c:S1854b"&Value stored to 'amount' is never read(ÛÓºüÿÿÿÿ
-Zc:S3519n"GOut of bound memory access (access exceeds upper limit of memory block)(ß£½œ
-Zc:S3519r"GOut of bound memory access (access exceeds upper limit of memory block)(ˆÁ÷°
