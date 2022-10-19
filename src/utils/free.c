@@ -19,7 +19,8 @@ void	free_array(char **array)
 	i = 0;
 	if (array)
 	{
-		while (array[i] != NULL) {
+		while (array[i] != NULL)
+        {
 			free(array[i]);
 			i++;
 		}
@@ -31,7 +32,8 @@ void	free_input(t_input *input)
 {
 	if (input->flags)
 		free(input->flags);
-	free_array(input->dir_operands);
+//    if (input->dir_operands)
+//    	free_array(input->dir_operands);
 }
 
 void	free_files(t_file **files)

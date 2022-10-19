@@ -56,12 +56,13 @@ char	**subdir_recursive(char *directory)
 	dir = opendir(directory);
 	while ((dirp = readdir(dir)) != NULL)
 	{
-		if (dirp->d_type == DT_DIR && ft_strcmp(directory, ".") != 0 && ft_strcmp(directory, "..") != 0)
+		if (ft_strcmp(dirp->d_name, ".") && ft_strcmp(dirp->d_name, "..") && dirp->d_type == DT_DIR)
 		{
-			return (string_array_join(new, subdir_recursive(dirp->d_name)));
+            new = string_array_join(new, subdir_recursive(join_path(directory, dirp->d_name)));
 		}
 	}
 	closedir(dir);
+    new = add_string_to_array_front(directory, new);
 	return (new);
 }
 
@@ -79,14 +80,18 @@ char	**find_subdirectories(char **dir_operands)
 
 t_directory **get_dirs_from_operands(char **dir_operands, char *flags)
 {
-	t_directory	**directories;
-	int			i;
+    t_directory **directories;
+    int         i;
 
-	i = 0;
-	if (ft_strchr(flags, 'R'))
-		dir_operands = find_subdirectories(dir_operands);
-	while (dir_operands[i])
-		i++;
+    i = 0;
+    if (ft_strchr(flags, 'R'))
+        dir_operands = find_subdirectories(dir_operands);
+    for (int x = 0; dir_operands[x]; x++) {
+        ft_printf("%s\n", dir_operands[x]);
+    }
+    while (dir_operands[i] != NULL){
+        i++;
+    }
 	directories = (t_directory **)malloc(sizeof(t_directory) * (i + 1));
 	directories[i] = NULL;
 	i = 0;

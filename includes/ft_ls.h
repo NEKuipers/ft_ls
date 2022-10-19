@@ -91,6 +91,7 @@ void			error_and_exit(char *reason, t_data data);
 char			*join_path(char const *s1, char const *s2);
 char			**string_array_join(char **s1, char **s2);
 char			**add_string_to_array_front(char *s1, char **s2);
+char	        **str_to_str_array(char *s1);
 int				arr_size(char **array);
 void			el();
 

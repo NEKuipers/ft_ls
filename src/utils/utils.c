@@ -89,8 +89,19 @@ char	**string_array_join(char **s1, char **s2)
 	while (s2[j] != NULL)
 		new[i++] = s2[j++];
 	new[i] = NULL;
-	free_array(s1);
-	free_array(s2);
+//	free_array(s1);
+//	free_array(s2);
+	return (new);
+}
+
+char	**str_to_str_array(char *s1)
+{
+	char	**new;
+
+	new = (char**)malloc(sizeof(char *) * 2);
+	new[1] = NULL;
+	new[0] = ft_strdup(s1);
+//	free(s1);
 	return (new);
 }
 
@@ -100,19 +111,22 @@ char	**add_string_to_array_front(char *s1, char **s2)
 	int		i;
 
 	i = 1;
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
+	if (s1 == NULL)
+		return (s2);
+	if (s2 == NULL)
+		return (str_to_str_array(s1));
 	new = (char **)malloc(sizeof(char *) * (2 + arr_size(s2)));
 	if (new == NULL)
 		return (NULL);
 	new[0] = ft_strdup(s1);
-	free(s1);
-	while (s2[1] != NULL)
+//	if (s1)
+//		free(s1);
+	while (s2[i - 1] != NULL)
 	{
 		new[i] = s2[i - 1];
 		i++;
 	}
 	new[i] = NULL;
-	free_array(s2);
+//	free_array(s2);
 	return (new);
 }

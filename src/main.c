@@ -22,6 +22,6 @@ int	main(int ac, char **av)
 	free_input(&input);
 	// sort_data(data);
 	// print_data(data);
-	free_data(&data);
+    free_data(&data);
 	return (0);
 }
